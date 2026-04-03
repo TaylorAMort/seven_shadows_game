@@ -1,3 +1,6 @@
+import pygame
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+
 def opening_screen():
     font = pygame.font.Font("elvencommonspeak-2.ttf", 120)
     text_surface = font.render("Seven Shadows of the Shattered Blade", True, (255, 255, 255))
