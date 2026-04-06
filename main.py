@@ -1,5 +1,5 @@
 import pygame
-import events
+from events import *
 from buttons import GameState, UIElement
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -13,7 +13,7 @@ def main():
         if game_state == GameState.TITLE:
             game_state = title_screen()
         if game_state == GameState.NEWGAME:
-            game_state = events.play_level(screen)
+            game_state = play_level(screen)
         if game_state == GameState.QUIT:
             pygame.quit()
             return

@@ -1,6 +1,6 @@
 import pygame
 from buttons import GameState, UIElement
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH, 
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def title_screen(screen):
     start_btn = UIElement(
