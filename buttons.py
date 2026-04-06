@@ -38,3 +38,5 @@ class UIElement(Sprite):
 
 class GameState(Enum):
     QUIT = -1
+    TITLE = 0
+    NEWGAME = 1
