@@ -1,6 +1,8 @@
+from email.mime import text
+
 import pygame
 from pygame.sprite import Sprite
-from font_render import create_surface_with_text
+from font_render import create_surface_with_text, create_surface_with_text_fancy
 from enum import Enum
 
 class UIElement(Sprite):
@@ -32,6 +34,28 @@ class UIElement(Sprite):
                 return self.action
         else:
             self.mouse_over = False
+    
+    def draw(self, surface):
+        surface.blit(self.image(), self.rect())
+
+class Title(UIElement):
+    def __init__(self, center_position, text, font_size, text_rgb, bg_rgb):
+        super().__init__(center_position, text, font_size, text_rgb, bg_rgb)
+        self.mouse_over = False
+        default_image = create_surface_with_text_fancy(text=text, font_size=font_size, text_rgb=text_rgb, bg_rgb=bg_rgb)
+        self.images = [default_image]
+        self.rects = [
+            default_image.get_rect(center=center_position)
+        ]
+
+        
+
+    def image(self):
+        return self.images[0]
+    
+    def rect(self):
+        return self.rects[0]
+
     
     def draw(self, surface):
         surface.blit(self.image(), self.rect())

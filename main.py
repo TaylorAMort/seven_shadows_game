@@ -10,18 +10,14 @@ def main():
     game_state = GameState.TITLE
 
     while True:
+        mouse_up = False
         if game_state == GameState.TITLE:
-            game_state = title_screen()
+            game_state = title_screen(screen)
         if game_state == GameState.NEWGAME:
             game_state = play_level(screen)
         if game_state == GameState.QUIT:
             pygame.quit()
             return
-        mouse_up = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
         screen.fill((0, 0, 0))
         pygame.display.flip()
         
