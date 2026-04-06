@@ -1,9 +1,8 @@
 import pygame
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+import pygame.freetype
+from pygame.rect import Rect
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-def opening_screen():
-    font = pygame.font.Font("fonts/elvencommonspeak-2.ttf", 120)
-    text_surface = font.render("Seven Shadows of the Shattered Blade", True, (255, 255, 255))
-    return screen.blit(text_surface, (SCREEN_WIDTH // 2 - text_surface.get_width() // 2, SCREEN_HEIGHT // 2 - text_surface.get_height() // 2))
+def create_surface_with_text(text, font_size, text_rgb, bg_rgb):
+    font = pygame.freetype.SysFont("Helvetica", font_size, bold=True)
+    surface, _ = font.render(text=text, fgcolor=text_rgb, bgcolor=bg_rgb)
+    return surface.convert_alpha()
