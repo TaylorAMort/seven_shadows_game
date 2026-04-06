@@ -4,7 +4,7 @@ from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def title_screen(screen):
     start_btn = UIElement(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50),
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -12,7 +12,7 @@ def title_screen(screen):
         action=GameState.NEWGAME,
     )
     quit_btn = UIElement(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2.5),
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -21,7 +21,7 @@ def title_screen(screen):
     )
     title = Title(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3),
-        font_size=50,
+        font_size=80,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Seven Shadows of the Shattered Blade",

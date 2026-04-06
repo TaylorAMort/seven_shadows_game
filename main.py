@@ -1,4 +1,5 @@
 import pygame
+import json
 from events import *
 from buttons import GameState, UIElement
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
