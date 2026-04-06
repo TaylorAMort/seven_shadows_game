@@ -1,10 +1,12 @@
 import pygame
 from pygame.sprite import Sprite
 from font_render import create_surface_with_text
+from enum import Enum
 
 class UIElement(Sprite):
-    def __init__(self, center_position, text, font_size, text_rgb, bg_rgb):
+    def __init__(self, center_position, text, font_size, text_rgb, bg_rgb, action=None):
         self.mouse_over = False
+        self.action = action
         default_image = create_surface_with_text(text=text, font_size=font_size, text_rgb=text_rgb, bg_rgb=bg_rgb)
         highlighted_image = create_surface_with_text(
             text=text, font_size=font_size * 1.2, text_rgb=text_rgb, bg_rgb=bg_rgb
@@ -23,11 +25,16 @@ class UIElement(Sprite):
     def rect(self):
         return self.rects[1] if self.mouse_over else self.rects[0]
     
-    def update(self, mouse_pos):
+    def update(self, mouse_pos, mouse_up):
         if self.rect().collidepoint(mouse_pos):
             self.mouse_over = True
+            if mouse_up:
+                return self.action
         else:
             self.mouse_over = False
     
     def draw(self, surface):
         surface.blit(self.image(), self.rect())
+
+class GameState(Enum):
+    QUIT = -1
