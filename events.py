@@ -2,6 +2,8 @@ import pygame
 from buttons import GameState, UIElement, Title
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
+player_level = 0
+
 def title_screen(screen):
     start_btn = UIElement(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50),
