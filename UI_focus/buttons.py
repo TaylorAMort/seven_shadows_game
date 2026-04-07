@@ -2,7 +2,7 @@ from email.mime import text
 
 import pygame
 from pygame.sprite import Sprite
-from font_render import create_surface_with_text, create_surface_with_text_fancy
+from UI_focus.font_render import create_surface_with_text, create_surface_with_text_fancy
 from enum import Enum
 
 class UIElement(Sprite):

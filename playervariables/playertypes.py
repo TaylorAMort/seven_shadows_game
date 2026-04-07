@@ -8,6 +8,7 @@ class Player:
         self.dexterity = dex
         self.intelligence = int
         self.wisdom = wis
+        self.inventory = []
     
     def attack(self, other):
     

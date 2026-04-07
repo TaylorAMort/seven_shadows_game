@@ -1,5 +1,6 @@
 import pygame
-from buttons import GameState, UIElement, Title
+from UI_focus.buttons import GameState, UIElement, Title
+from playervariables.playertypes import Player
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 player_level = 0
