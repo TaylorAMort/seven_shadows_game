@@ -7,5 +7,7 @@ wheels/
 *.egg-info
 *.ttf
 .python-version
+uv.lock
+pyproject.toml
 # Virtual environments
 .venv
