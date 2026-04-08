@@ -1,5 +1,6 @@
 import pygame
 from UI_focus.buttons import GameState, UIElement, Title
+from UI_focus.font_render import create_surface_with_text_fancy
 from playervariables.playertypes import Player
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from pygame.sprite import RenderUpdates
@@ -7,7 +8,7 @@ from pygame.sprite import RenderUpdates
 
 player_level = 0
 
-def game_loop(screen, buttons):
+def game_loop(screen, buttons, extra_draw_callback=None):
     while True:
         mouse_up = False
         for event in pygame.event.get():
@@ -17,6 +18,9 @@ def game_loop(screen, buttons):
                 pygame.quit()
                 return
         screen.fill((0, 0, 0))
+
+        if extra_draw_callback is not None:
+            extra_draw_callback(screen)
 
         for button in buttons:
             ui_action = button.update(pygame.mouse.get_pos(), mouse_up)
@@ -42,16 +46,18 @@ def title_screen(screen):
         text="Quit",
         action=GameState.QUIT,
     )
-    title = Title(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3),
-        font_size=80,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+    
+    title = create_surface_with_text_fancy(
         text="Seven Shadows of the Shattered Blade",
+        font_size=80,
+        text_rgb=(255, 255, 255),
+        bg_rgb=(0, 0, 0),
     )
 
-    buttons = RenderUpdates(start_btn, quit_btn, title)
-    return game_loop(screen, buttons)
+    title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
+
+    buttons = RenderUpdates(start_btn, quit_btn)
+    return game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(title, title_rect))
 
 def inventory_screen(screen, player):
     for item in player.inventory:
