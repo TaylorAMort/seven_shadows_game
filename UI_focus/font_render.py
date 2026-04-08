@@ -2,7 +2,7 @@ from pathlib import Path
 import pygame
 import pygame.freetype
 
-FANCY_FONT = Path(__file__).resolve().parent / "fonts" / "elvencommonspeak-2.ttf"
+FANCY_FONT = Path(__file__).resolve().parent.parent / "fonts" / "elvencommonspeak-2.ttf"
 
 def create_surface_with_text_fancy(text, font_size, text_rgb, bg_rgb):
     font = pygame.freetype.Font(FANCY_FONT, font_size)

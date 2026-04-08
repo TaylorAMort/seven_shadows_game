@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Player:
     def __init__(self, name, health, str, dex, int, wis):
@@ -10,11 +11,18 @@ class Player:
         self.wisdom = wis
         self.inventory = []
     
-    def attack(self, other):
+    def attack(self, other, weapon):
+        damage = self.strength + weapon.damage
+        other.health -= damage
+        return print(f"You attack {other.name} with {weapon.name} for {damage} damage! {other.name} has {other.health} health remaining.")
     
     def defend(self, damage):
+        return damage // 2
 
     def sneak(self, other):
+        if self.dexterity + random.randint(1, 20) > other.wisdom + random.randint(1, 20):
+            return print(f"You successfully sneak past {other.name}!")
+        return print(f"You fail to sneak past {other.name} and alert them to your presence!")
         
 
 class Shadow(Player):

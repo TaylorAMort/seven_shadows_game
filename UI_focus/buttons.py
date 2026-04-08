@@ -64,3 +64,5 @@ class GameState(Enum):
     QUIT = -1
     TITLE = 0
     NEWGAME = 1
+    INVENTORY = 2
+    PLAYING = 3
