@@ -1,6 +1,6 @@
 import pygame
 from UI_focus.buttons import GameState, UIElement, Title
-from UI_focus.font_render import create_surface_with_text_fancy
+from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 from playervariables.playertypes import Player
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from pygame.sprite import RenderUpdates
@@ -58,6 +58,35 @@ def title_screen(screen):
 
     buttons = RenderUpdates(start_btn, quit_btn)
     return game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(title, title_rect))
+
+def new_game(screen):
+    name = input("Enter your character's name: ")
+
+    selection = create_surface_with_text(
+        text=f"Welcome, {name}. Select your class:",
+        font_size=40,
+        text_rgb=(255, 255, 255),
+        bg_rgb=(0, 0, 0),
+    )
+
+    selection_rect = selection.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
+
+    right_btn = UIElement(
+        center_position=(SCREEN_WIDTH // 4 *2, SCREEN_HEIGHT // 2),
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text=">",
+        action=None,
+    )
+    left_btn = UIElement(
+        center_position=(SCREEN_WIDTH // 4, SCREEN_HEIGHT // 2),
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="<",
+        action=None,
+    )
 
 def inventory_screen(screen, player):
     for item in player.inventory:

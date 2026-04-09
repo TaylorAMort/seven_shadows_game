@@ -16,8 +16,7 @@ def main():
         if game_state == GameState.TITLE:
             game_state = title_screen(screen)
         if game_state == GameState.NEWGAME:
-            player = Player(name="Player", health=100, str=10, dex=10, int=10, wis=10)
-            game_state = play_level(screen)
+            game_state = new_game(screen)
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
         if game_state == GameState.PLAYING:
