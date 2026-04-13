@@ -1,6 +1,7 @@
 import pygame
 from UI_focus.buttons import *
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
+from assets import assets
 from playervariables.playertypes import *
 from constants import *
 from pygame.sprite import RenderUpdates
@@ -60,7 +61,7 @@ def title_screen(screen):
     buttons = RenderUpdates(start_btn, quit_btn)
     return game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(title, title_rect))
 
-def get_player_name(screen, clock):
+def get_player_name(screen, clock, assets):
 
     name   = ""
     active = True
@@ -123,17 +124,11 @@ def get_player_name(screen, clock):
         pygame.display.flip()
 
 
-    return class_selection_screen(screen, name)
+    return class_selection_screen(screen, name, assets)
 
 
-def class_selection_screen(screen, name):
-    SHADOW_IMAGE = pygame.image.load("assets/cowled.png").convert_alpha()
-    BLOOD_IMAGE = pygame.image.load("assets/bleeding-wound.png").convert_alpha()
-    FLAME_IMAGE = pygame.image.load("assets/fire.png").convert_alpha()
-    MEMORY_IMAGE = pygame.image.load("assets/gift-of-knowledge.png").convert_alpha()
-    STONE_IMAGE = pygame.image.load("assets/stone.png").convert_alpha()
-    TIDE_IMAGE = pygame.image.load("assets/wave-crest.png").convert_alpha()
-    WIND_IMAGE = pygame.image.load("assets/wind-slap.png").convert_alpha()
+def class_selection_screen(screen, name, assets):
+    
     
     selection = create_surface_with_text(
         text=f"Welcome, {name}. Select your class:",
@@ -143,10 +138,14 @@ def class_selection_screen(screen, name):
     )
 
     selection_rect = selection.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
+    first_row = selection_rect.bottom + 20
+    second_row = first_row + 120
+    positions_row_1 = [(SCREEN_WIDTH // 4 * (i + 1), first_row) for i in range(4)]
+    positions_row_2 = [(SCREEN_WIDTH // 3 * (i + 1), second_row) for i in range(4)]
 
     shadow_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=SHADOW_IMAGE,
+        center_position=positions_row_1[0],
+        image=assets["SHADOW_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -155,8 +154,8 @@ def class_selection_screen(screen, name):
     )
 
     flame_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=FLAME_IMAGE,
+        center_position=positions_row_1[1],
+        image=assets["FLAME_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -165,18 +164,19 @@ def class_selection_screen(screen, name):
     )
 
     blood_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=BLOOD_IMAGE,
+        center_position=positions_row_1[2],
+        image=assets["BLOOD_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Blood",
         action=Blood(name, 100, 10, 10, 10, 10),
     )
+        
 
     memory_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=MEMORY_IMAGE,
+        center_position=positions_row_1[3],
+        image=assets["MEMORY_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -185,8 +185,8 @@ def class_selection_screen(screen, name):
     )
 
     stone_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=STONE_IMAGE,
+        center_position=positions_row_2[0],
+        image=assets["STONE_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -195,8 +195,8 @@ def class_selection_screen(screen, name):
     )
 
     tide_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=TIDE_IMAGE,
+        center_position=positions_row_2[1],
+        image=assets["TIDE_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -205,8 +205,8 @@ def class_selection_screen(screen, name):
     )
 
     wind_btn = ImageButton(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
-        image=WIND_IMAGE,
+        center_position=positions_row_2[2],
+        image=assets["WIND_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),

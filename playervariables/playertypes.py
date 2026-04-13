@@ -27,25 +27,25 @@ class Player:
 
 class Shadow(Player):
     def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, wis)
+        super().__init__(name, health, str, dex, int, wis)
         self.dexterity = dex + 10
         self.intelligence = int + 5
 
 class Flame(Player):
     def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, int, wis)
+        super().__init__(name, health, str, dex, int, wis)
         self.strength = str + 10
         self.dexterity = dex + 5
 
 class Blood(Player):
     def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, wis)
+        super().__init__(name, health, str, dex, int, wis)
         self.intelligence = int + 10
         self.dexterity = dex + 5
 
 class Memory(Player):
     def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex)
+        super().__init__(name, health, str, dex, int, wis)
         self.wisdom = wis + 10
         self.intelligence = int + 5
 
@@ -57,13 +57,13 @@ class Stone(Player):
 
 class Tide(Player):
     def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, wis)
+        super().__init__(name, health, str, dex, int, wis)
         self.intelligence = int + 10
         self.dexterity = dex + 5
 
 class Wind(Player):
     def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, int, wis)
+        super().__init__(name, health, str, dex, int, wis)
         self.dexterity = dex + 10
         self.wisdom = wis + 5
 

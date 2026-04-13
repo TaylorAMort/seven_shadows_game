@@ -1,8 +1,7 @@
 import pygame
-import json
+import assets.assets as asset_loader
 from events import *
-from playervariables.playertypes import Player
-from UI_focus.buttons import GameState, UIElement
+from UI_focus.buttons import GameState
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def main():
@@ -12,18 +11,19 @@ def main():
     game_state = GameState.TITLE
     clock = pygame.time.Clock()
     player = None
-
+    assets = asset_loader.load_all()
+    
     while True:
         clock.tick(60)
         mouse_up = False
         if game_state == GameState.TITLE:
             game_state = title_screen(screen)
         if game_state == GameState.NEWGAME:
-            game_state = player = get_player_name(screen, clock)
+            game_state = player = get_player_name(screen, clock, assets)
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
         if game_state == GameState.PLAYING:
-            game_state = play_level(screen)
+            game_state = play_level(screen, player)
         if game_state == GameState.QUIT:
             pygame.quit()
             return
