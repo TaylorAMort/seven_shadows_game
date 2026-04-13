@@ -19,11 +19,13 @@ def main():
         if game_state == GameState.TITLE:
             game_state = title_screen(screen)
         if game_state == GameState.NEWGAME:
-            game_state = player = get_player_name(screen, clock, assets)
+            player = get_player_name(screen, clock, assets)
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
         if game_state == GameState.PLAYING:
             game_state = play_level_1(screen, player)
+        if game_state == GameState.LEVEL_2:
+            game_state = play_level_2(screen, player)
         if game_state == GameState.QUIT:
             pygame.quit()
             return

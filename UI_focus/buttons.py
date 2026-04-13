@@ -64,3 +64,4 @@ class GameState(Enum):
     NEWGAME = 1
     INVENTORY = 2
     PLAYING = 3
+    LEVEL_2 = 4

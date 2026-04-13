@@ -267,6 +267,15 @@ def play_level_1(screen, player):
             surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
             y += 40
 
+    continue_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Go further into the dungeon",
+        action=GameState.LEVEL_2,
+    )
+
     return_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         font_size=20,
@@ -284,6 +293,16 @@ def play_level_1(screen, player):
         text="Inventory",
         action=GameState.INVENTORY,
     )
+    buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)
 
-    buttons = RenderUpdates(return_btn, inventory_btn)
-    return game_loop(screen, buttons, extra_draw_callback=draw_lines)
+    while True:
+        result = game_loop(screen, buttons, extra_draw_callback=draw_lines)
+        if result == GameState.INVENTORY:
+            inventory_screen(screen, player)
+        elif result == GameState.LEVEL_2:
+            play_level_2(screen, player)
+        else == GameState.TITLE:
+            return GameState.TITLE
+
+    
+    
