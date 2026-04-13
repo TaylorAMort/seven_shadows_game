@@ -1,10 +1,10 @@
 import pygame
-import sys
-from UI_focus.buttons import GameState, UIElement, Title
+from UI_focus.buttons import *
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
-from playervariables.playertypes import Player
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from playervariables.playertypes import *
+from constants import *
 from pygame.sprite import RenderUpdates
+
 
 
 player_level = 0
@@ -31,7 +31,7 @@ def game_loop(screen, buttons, extra_draw_callback=None):
         pygame.display.flip()
 
 def title_screen(screen):
-    start_btn = UIElement(
+    start_btn = TextButton(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50),
         font_size=30,
         bg_rgb=(0, 0, 0),
@@ -39,7 +39,7 @@ def title_screen(screen):
         text="Start",
         action=GameState.NEWGAME,
     )
-    quit_btn = UIElement(
+    quit_btn = TextButton(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2.5),
         font_size=30,
         bg_rgb=(0, 0, 0),
@@ -61,10 +61,7 @@ def title_screen(screen):
     return game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(title, title_rect))
 
 def get_player_name(screen, clock):
-   
-    title_font  = pygame.font.SysFont("Helvetica", 36, bold=True)
-    input_font  = pygame.font.SysFont("Helvetica", 28)
-    prompt_font = pygame.font.SysFont("Helvetica", 18)
+
     name   = ""
     active = True
 
@@ -93,22 +90,35 @@ def get_player_name(screen, clock):
 
         screen.fill((0, 0, 0))
 
-        title_surf = title_font.render("Enter Your Name", True, (255, 255, 255))
+        title_surf = create_surface_with_text(
+            text="Enter your name:",
+            font_size=36,
+            text_rgb=(255, 255, 255),
+            bg_rgb=(0, 0, 0),
+        )
         screen.blit(title_surf, title_surf.get_rect(centerx=SCREEN_WIDTH // 2, y=180))
 
 
         pygame.draw.rect(screen, (100, 100, 100), box_rect, border_radius=8)
         pygame.draw.rect(screen, (200, 200, 200), box_rect, width=2, border_radius=8)
 
-        name_surf = input_font.render(name, True, (255, 255, 255))
+        name_surf = create_surface_with_text(
+            text=name,
+            font_size=28,
+            text_rgb=(255, 255, 255),
+            bg_rgb=(0, 0, 0),
+        )
         text_x = box_rect.x + 14
         text_y = box_rect.centery - name_surf.get_height() // 2
         screen.blit(name_surf, (text_x, text_y))
 
-        hint_surf = prompt_font.render("Press  Enter  to continue",
-                                       True, (255, 255, 255))
-        screen.blit(hint_surf, hint_surf.get_rect(centerx=SCREEN_WIDTH // 2,
-                                                   y=box_rect.bottom + 18))
+        hint_surf = create_surface_with_text(
+            text="Press Enter to confirm",
+            font_size=18,
+            text_rgb=(255, 255, 255),
+            bg_rgb=(0, 0, 0),
+        )
+        screen.blit(hint_surf, hint_surf.get_rect(centerx=SCREEN_WIDTH // 2, y=box_rect.bottom + 18))
 
         pygame.display.flip()
 
@@ -117,6 +127,14 @@ def get_player_name(screen, clock):
 
 
 def class_selection_screen(screen, name):
+    SHADOW_IMAGE = pygame.image.load("assets/cowled.png").convert_alpha()
+    BLOOD_IMAGE = pygame.image.load("assets/bleeding-wound.png").convert_alpha()
+    FLAME_IMAGE = pygame.image.load("assets/fire.png").convert_alpha()
+    MEMORY_IMAGE = pygame.image.load("assets/gift-of-knowledge.png").convert_alpha()
+    STONE_IMAGE = pygame.image.load("assets/stone.png").convert_alpha()
+    TIDE_IMAGE = pygame.image.load("assets/wave-crest.png").convert_alpha()
+    WIND_IMAGE = pygame.image.load("assets/wind-slap.png").convert_alpha()
+    
     selection = create_surface_with_text(
         text=f"Welcome, {name}. Select your class:",
         font_size=40,
@@ -126,30 +144,91 @@ def class_selection_screen(screen, name):
 
     selection_rect = selection.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
 
-    right_btn = UIElement(
-        center_position=(SCREEN_WIDTH // 4 *2, SCREEN_HEIGHT // 2),
+    shadow_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=SHADOW_IMAGE,
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
-        text=">",
-        action=None,
+        text="Shadow",
+        action=Shadow(name, 100, 10, 10, 10, 10),
     )
-    left_btn = UIElement(
-        center_position=(SCREEN_WIDTH // 4, SCREEN_HEIGHT // 2),
+
+    flame_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=FLAME_IMAGE,
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
-        text="<",
-        action=None,
+        text="Flame",
+        action=Flame(name, 100, 10, 10, 10, 10),
     )
+
+    blood_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=BLOOD_IMAGE,
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Blood",
+        action=Blood(name, 100, 10, 10, 10, 10),
+    )
+
+    memory_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=MEMORY_IMAGE,
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Memory",
+        action=Memory(name, 100, 10, 10, 10, 10),
+    )
+
+    stone_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=STONE_IMAGE,
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Stone",
+        action=Stone(name, 100, 10, 10, 10, 10),
+    )
+
+    tide_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=TIDE_IMAGE,
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Tide",
+        action=Tide(name, 100, 10, 10, 10, 10),
+    )
+
+    wind_btn = ImageButton(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        image=WIND_IMAGE,
+        font_size=30,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Wind",
+        action=Wind(name, 100, 10, 10, 10, 10),
+    )
+    buttons = RenderUpdates(shadow_btn, flame_btn, blood_btn, memory_btn, stone_btn, tide_btn, wind_btn)
+    player = game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(selection, selection_rect))
+    
+    return play_level(screen, player)
+    
+
+    
 
 def inventory_screen(screen, player):
     for item in player.inventory:
         print(item)
     
     
-    return_btn = UIElement(
+    return_btn = TextButton(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
+        image=None,
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -160,8 +239,8 @@ def inventory_screen(screen, player):
     buttons = RenderUpdates(return_btn)
     return game_loop(screen, buttons)
 
-def play_level(screen, name):
-    return_btn = UIElement(
+def play_level(screen, player):
+    return_btn = TextButton(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         font_size=20,
         bg_rgb=(0, 0, 0),
@@ -170,7 +249,7 @@ def play_level(screen, name):
         action=GameState.TITLE,
     )
 
-    inventory_btn = UIElement(
+    inventory_btn = TextButton(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3),
         font_size=20,
         bg_rgb=(0, 0, 0),

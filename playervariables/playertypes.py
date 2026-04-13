@@ -30,7 +30,6 @@ class Shadow(Player):
         super().__init__(name, health, str, wis)
         self.dexterity = dex + 10
         self.intelligence = int + 5
-        self.image = pygame
 
 class Flame(Player):
     def __init__(self, name, health, str, dex, int, wis):
