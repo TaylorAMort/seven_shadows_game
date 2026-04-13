@@ -59,7 +59,7 @@ class Tide(Player):
     def __init__(self, name, health, str, dex, int, wis):
         super().__init__(name, health, str, dex, int, wis)
         self.intelligence = int + 10
-        self.dexterity = dex + 5
+        self.dexterity = str + 5
 
 class Wind(Player):
     def __init__(self, name, health, str, dex, int, wis):

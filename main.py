@@ -23,7 +23,7 @@ def main():
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
         if game_state == GameState.PLAYING:
-            game_state = play_level(screen, player)
+            game_state = play_level_1(screen, player)
         if game_state == GameState.QUIT:
             pygame.quit()
             return

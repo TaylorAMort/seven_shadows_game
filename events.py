@@ -138,12 +138,12 @@ def class_selection_screen(screen, name, assets):
     )
 
     selection_rect = selection.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
-    first_row = selection_rect.bottom + 20
-    second_row = first_row + 120
-    positions_row_1 = [(SCREEN_WIDTH // 4 * (i + 1), first_row) for i in range(4)]
-    positions_row_2 = [(SCREEN_WIDTH // 3 * (i + 1), second_row) for i in range(4)]
+    first_row = selection_rect.bottom + 140
+    second_row = first_row + 200
+    positions_row_1 = [(SCREEN_WIDTH // 5 * (i + 1), first_row) for i in range(4)]
+    positions_row_2 = [(SCREEN_WIDTH // 4 * (i + 1), second_row) for i in range(3)]
 
-    shadow_btn = ImageButton(
+    shadow_btn = Button(
         center_position=positions_row_1[0],
         image=assets["SHADOW_IMAGE"],
         font_size=30,
@@ -151,30 +151,36 @@ def class_selection_screen(screen, name, assets):
         text_rgb=(255, 255, 255),
         text="Shadow",
         action=Shadow(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to dexterity",
+        subsubtitle="Moderate boost to intelligence"
     )
 
-    flame_btn = ImageButton(
-        center_position=positions_row_1[1],
+    flame_btn = Button(
+        center_position=positions_row_2[2],
         image=assets["FLAME_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Flame",
         action=Flame(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to strength",
+        subsubtitle="Moderate boost to dexterity"
     )
 
-    blood_btn = ImageButton(
-        center_position=positions_row_1[2],
+    blood_btn = Button(
+        center_position=positions_row_2[0],
         image=assets["BLOOD_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Blood",
         action=Blood(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to intelligence",
+        subsubtitle="Moderate boost to dexterity"
     )
         
 
-    memory_btn = ImageButton(
+    memory_btn = Button(
         center_position=positions_row_1[3],
         image=assets["MEMORY_IMAGE"],
         font_size=30,
@@ -182,43 +188,49 @@ def class_selection_screen(screen, name, assets):
         text_rgb=(255, 255, 255),
         text="Memory",
         action=Memory(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to wisdom",
+        subsubtitle="Moderate boost to intelligence"
     )
 
-    stone_btn = ImageButton(
-        center_position=positions_row_2[0],
+    stone_btn = Button(
+        center_position=positions_row_1[2],
         image=assets["STONE_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Stone",
         action=Stone(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to strength",
+        subsubtitle="Moderate boost to wisdom"
     )
 
-    tide_btn = ImageButton(
-        center_position=positions_row_2[1],
+    tide_btn = Button(
+        center_position=positions_row_1[1],
         image=assets["TIDE_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Tide",
         action=Tide(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to intelligence",
+        subsubtitle="Moderate boost to strength"
     )
 
-    wind_btn = ImageButton(
-        center_position=positions_row_2[2],
+    wind_btn = Button(
+        center_position=positions_row_2[1],
         image=assets["WIND_IMAGE"],
         font_size=30,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Wind",
         action=Wind(name, 100, 10, 10, 10, 10),
+        subtitle="Large boost to dexterity",
+        subsubtitle="Moderate boost to wisdom"
     )
     buttons = RenderUpdates(shadow_btn, flame_btn, blood_btn, memory_btn, stone_btn, tide_btn, wind_btn)
     player = game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(selection, selection_rect))
     
-    return play_level(screen, player)
-    
-
+    return play_level_1(screen, player)
     
 
 def inventory_screen(screen, player):
@@ -226,7 +238,7 @@ def inventory_screen(screen, player):
         print(item)
     
     
-    return_btn = TextButton(
+    return_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         image=None,
         font_size=20,
@@ -239,8 +251,23 @@ def inventory_screen(screen, player):
     buttons = RenderUpdates(return_btn)
     return game_loop(screen, buttons)
 
-def play_level(screen, player):
-    return_btn = TextButton(
+def play_level_1(screen, player):
+
+    lines = [
+        "The dungeon smells of rot and decay.",
+        "The moans of the imprisoned and the clinking of chains create a cacophony of death.",
+        "To be damned here is to suffer a fate worse than death.",
+        f"But you are far from damned {player.name}."
+    ]
+
+    def draw_lines(surface):
+        y = SCREEN_HEIGHT // 5
+        for line in lines:
+            surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
+            surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
+            y += 40
+
+    return_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         font_size=20,
         bg_rgb=(0, 0, 0),
@@ -249,7 +276,7 @@ def play_level(screen, player):
         action=GameState.TITLE,
     )
 
-    inventory_btn = TextButton(
+    inventory_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3),
         font_size=20,
         bg_rgb=(0, 0, 0),
@@ -259,4 +286,4 @@ def play_level(screen, player):
     )
 
     buttons = RenderUpdates(return_btn, inventory_btn)
-    return game_loop(screen, buttons)
+    return game_loop(screen, buttons, extra_draw_callback=draw_lines)
