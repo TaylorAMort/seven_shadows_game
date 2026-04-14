@@ -6,9 +6,44 @@ from playervariables.playertypes import *
 from constants import *
 from pygame.sprite import RenderUpdates
 
+def nav_buttons(screen, player):
+    return_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Return to main menu",
+        action=GameState.TITLE,
+    )
+
+    inventory_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Inventory",
+        action=GameState.INVENTORY,
+    )
+    return return_btn, inventory_btn
 
 
-player_level = 0
+def inventory_screen(screen, player):
+    for item in player.inventory:
+        print(item)
+    
+    
+    return_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
+        image=None,
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Return to game",
+        action=GameState.PLAYING,
+    )
+
+    buttons = RenderUpdates(return_btn)
+    return game_loop(screen, buttons)
 
 def game_loop(screen, buttons, extra_draw_callback=None):
     while True:
@@ -230,29 +265,13 @@ def class_selection_screen(screen, name, assets):
     buttons = RenderUpdates(shadow_btn, flame_btn, blood_btn, memory_btn, stone_btn, tide_btn, wind_btn)
     player = game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(selection, selection_rect))
     
-    return play_level_1(screen, player)
+    return player
     
 
-def inventory_screen(screen, player):
-    for item in player.inventory:
-        print(item)
-    
-    
-    return_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
-        image=None,
-        font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
-        text="Return to game",
-        action=GameState.PLAYING,
-    )
 
-    buttons = RenderUpdates(return_btn)
-    return game_loop(screen, buttons)
 
 def play_level_1(screen, player):
-
+    return_btn, inventory_btn = nav_buttons(screen, player)
     lines = [
         "The dungeon smells of rot and decay.",
         "The moans of the imprisoned and the clinking of chains create a cacophony of death.",
@@ -266,6 +285,7 @@ def play_level_1(screen, player):
             surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
             surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
             y += 40
+        pygame.draw.rect(screen, (255, 255, 255), continue_btn.rect(), width=2, border_radius=8)
 
     continue_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
@@ -276,23 +296,8 @@ def play_level_1(screen, player):
         action=GameState.LEVEL_2,
     )
 
-    return_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
-        font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
-        text="Return to main menu",
-        action=GameState.TITLE,
-    )
+    
 
-    inventory_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3),
-        font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
-        text="Inventory",
-        action=GameState.INVENTORY,
-    )
     buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)
 
     while True:
@@ -301,8 +306,6 @@ def play_level_1(screen, player):
             inventory_screen(screen, player)
         elif result == GameState.LEVEL_2:
             play_level_2(screen, player)
-        else == GameState.TITLE:
+        else:
             return GameState.TITLE
-
-    
-    
+        

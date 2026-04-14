@@ -20,6 +20,7 @@ def main():
             game_state = title_screen(screen)
         if game_state == GameState.NEWGAME:
             player = get_player_name(screen, clock, assets)
+            game_state = GameState.PLAYING
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
         if game_state == GameState.PLAYING:
