@@ -1,5 +1,6 @@
-import pygame
 import random
+from playervariables.weapontypes import Weapon, HealthPotion
+from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 
 class Player:
     def __init__(self, name, health, str, dex, int, wis):
@@ -9,20 +10,43 @@ class Player:
         self.dexterity = dex
         self.intelligence = int
         self.wisdom = wis
-        self.inventory = []
+        self.karma = 0
+        self.inventory = [Weapon("Rusty Dagger", 5, "A dull and worn dagger. Better than nothing, but not by much."),
+                          HealthPotion("Minor Healing Potion", 20, "A small vial filled with a red liquid. Restores a small amount of health when consumed.")]
     
     def attack(self, other, weapon):
         damage = self.strength + weapon.damage
         other.health -= damage
-        return print(f"You attack {other.name} with {weapon.name} for {damage} damage! {other.name} has {other.health} health remaining.")
+        return create_surface_with_text(
+            text=f"You attack {other.name} with {weapon.name} for {damage} damage! {other.name} has {other.health} health remaining.",
+            font_size=10,
+            text_rgb=(255, 255, 255),
+            bg_rgb=(0, 0, 0)
+        )
+        
     
     def defend(self, damage):
-        return damage // 2
+        return create_surface_with_text(
+            text=f"You defend against the attack and take {damage // 2} damage!",
+            font_size=10,
+            text_rgb=(255, 255, 255),
+            bg_rgb=(0, 0, 0)
+        )
 
     def sneak(self, other):
         if self.dexterity + random.randint(1, 20) > other.wisdom + random.randint(1, 20):
-            return print(f"You successfully sneak past {other.name}!")
-        return print(f"You fail to sneak past {other.name} and alert them to your presence!")
+            return create_surface_with_text(
+                text=f"You successfully sneak past {other.name}!",
+                font_size=10,
+                text_rgb=(255, 255, 255),
+                bg_rgb=(0, 0, 0)
+            )
+        return create_surface_with_text(
+            text=f"You fail to sneak past {other.name} and alert them to your presence!",
+            font_size=10,
+            text_rgb=(255, 255, 255),
+            bg_rgb=(0, 0, 0)
+        )
         
 
 class Shadow(Player):

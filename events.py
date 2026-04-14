@@ -28,9 +28,17 @@ def nav_buttons(screen, player):
 
 
 def inventory_screen(screen, player):
-    for item in player.inventory:
-        print(item)
-    
+    def draw_inventory(surface):
+        y = SCREEN_HEIGHT // 5
+        for item in player.inventory:
+            object = create_surface_with_text(
+                text=f"{item.name}: {item.description}",
+                font_size=20,
+                text_rgb=(255, 255, 255),
+                bg_rgb=(0, 0, 0),
+            )
+            surface.blit(object, object.get_rect(left= 30, y=y))
+            y += 40    
     
     return_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
@@ -43,7 +51,7 @@ def inventory_screen(screen, player):
     )
 
     buttons = RenderUpdates(return_btn)
-    return game_loop(screen, buttons)
+    return game_loop(screen, buttons, extra_draw_callback=draw_inventory)
 
 def game_loop(screen, buttons, extra_draw_callback=None):
     while True:
@@ -287,7 +295,7 @@ def play_level_1(screen, player):
             y += 40
 
     continue_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -295,8 +303,6 @@ def play_level_1(screen, player):
         action=GameState.LEVEL_2,
         border_rgb=(255, 255, 255),
     )
-
-    
 
     buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)
 
@@ -309,3 +315,19 @@ def play_level_1(screen, player):
         else:
             return GameState.TITLE
         
+def play_level_2(screen, player):
+    return_btn, inventory_btn = nav_buttons(screen, player)
+    lines = [
+        "Your steps echo through the abandoned hallway.",
+        "Up ahead, you see a thin light flickering. A door, forgotten by time.",
+        "As you press it open, you see an empty room, the furniture broken and decayed."
+    ]
+
+    def draw_lines(surface):
+        y = SCREEN_HEIGHT // 5
+        for line in lines:
+            surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
+            surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
+            y += 40
+    
+    
