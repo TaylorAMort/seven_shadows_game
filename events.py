@@ -275,7 +275,7 @@ def play_level_1(screen, player):
     lines = [
         "The dungeon smells of rot and decay.",
         "The moans of the imprisoned and the clinking of chains create a cacophony of death.",
-        "To be damned here is to suffer a fate worse than death.",
+        "To be damned here is to suffer for eternity.",
         f"But you are far from damned {player.name}."
     ]
 
@@ -285,7 +285,6 @@ def play_level_1(screen, player):
             surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
             surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
             y += 40
-        pygame.draw.rect(screen, (255, 255, 255), continue_btn.rect(), width=2, border_radius=8)
 
     continue_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2),
@@ -294,6 +293,7 @@ def play_level_1(screen, player):
         text_rgb=(255, 255, 255),
         text="Go further into the dungeon",
         action=GameState.LEVEL_2,
+        border_rgb=(255, 255, 255),
     )
 
     

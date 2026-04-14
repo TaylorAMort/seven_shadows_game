@@ -1,12 +1,14 @@
+import pygame
 from pygame.sprite import Sprite
 from UI_focus.font_render import create_surface_with_text
 from enum import Enum
 
 class Button(Sprite):
     def __init__(self, center_position, text, font_size, text_rgb, bg_rgb,
-                 action=None, image=None, subtitle=None, subsubtitle=None):
+                 action=None, image=None, subtitle=None, subsubtitle=None, border_rgb=None):
         self.mouse_over = False
         self.action = action
+        self.border_rgb = border_rgb
         self.symbol = image
         default_image = create_surface_with_text(text=text, font_size=font_size, text_rgb=text_rgb, bg_rgb=bg_rgb)
         highlighted_image = create_surface_with_text(
@@ -47,6 +49,8 @@ class Button(Sprite):
             symbol_rect = self.symbol.get_rect(centerx=self.rect().centerx, bottom=self.rect().top)
             surface.blit(self.symbol, symbol_rect)
         surface.blit(self.image(), self.rect())
+        if self.border_rgb:
+            pygame.draw.rect(surface, self.border_rgb, self.rect().inflate(20,20), width=2, border_radius=8)
         if self.subtitle_surf:
             subtitle_rect = self.subtitle_surf.get_rect(centerx=self.rect().centerx, top=self.rect().bottom + 4)
             surface.blit(self.subtitle_surf, subtitle_rect)
