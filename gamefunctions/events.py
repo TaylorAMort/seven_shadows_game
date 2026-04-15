@@ -75,7 +75,7 @@ def game_loop(screen, buttons, extra_draw_callback=None):
         pygame.display.flip()
 
 def title_screen(screen):
-    start_btn = TextButton(
+    start_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50),
         font_size=30,
         bg_rgb=(0, 0, 0),
@@ -83,7 +83,7 @@ def title_screen(screen):
         text="Start",
         action=GameState.NEWGAME,
     )
-    quit_btn = TextButton(
+    quit_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2.5),
         font_size=30,
         bg_rgb=(0, 0, 0),
@@ -278,7 +278,7 @@ def class_selection_screen(screen, name, assets):
 
 
 
-def play_level_1(screen, player):
+def play_level_1(screen, player, story):
     return_btn, inventory_btn = nav_buttons(screen, player)
     lines = [
         "The dungeon smells of rot and decay.",
@@ -311,20 +311,44 @@ def play_level_1(screen, player):
         if result == GameState.INVENTORY:
             inventory_screen(screen, player)
         elif result == GameState.LEVEL_2:
-            play_level_2(screen, player)
+            play_level_2(screen, player, story)
         else:
             return GameState.TITLE
         
 def play_level_2(screen, player, story):
     story.enter_scene("End of the Hallway")
-    story.
+    round = story.rounds("End of the Hallway")
     return_btn, inventory_btn = nav_buttons(screen, player)
-    lines = [
+
+    if round == 1:
+        lines = [
         "Your steps echo through the abandoned hallway.",
         "Up ahead, you see a thin light flickering. A door, forgotten by time.",
         "As you press it open, you see an empty room, the furniture broken and decayed.",
         "On the left wall, another door stands, the flickering of torchlight coming from the other side."
-    ]
+        ]
+
+    elif round == 2:
+        lines = [
+            "In the remains of the once ornate nighstand you find a note.",
+            "It reads: 'The blade only serves itself.'",
+            "The rest of the note is unreadable."
+        ]
+        story.make_choice("Found note in hallway")
+
+        Go_back_btn = Button(
+            center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+            font_size=20,
+            bg_rgb=(0, 0, 0),
+            text_rgb=(255, 255, 255),
+            text="Go back",
+            action=GameState.PLAYING,
+            border_rgb=(255, 255, 255),
+        )
+    else:
+        lines = [
+            "The room is still empty and desolate."
+        ]
 
     def draw_lines(surface):
         y = SCREEN_HEIGHT // 5
@@ -352,6 +376,19 @@ def play_level_2(screen, player, story):
         action=GameState.LEVEL_3,
         border_rgb=(255, 255, 255),
     )
+    buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, Leave_btn, Go_back_btn if round == 1 else None)
+    while True:
+        result = game_loop(screen, buttons, extra_draw_callback=draw_lines)
+        if result == GameState.INVENTORY:
+            inventory_screen(screen, player)
+        elif result == GameState.LEVEL_3:
+            return GameState.LEVEL_3
+        else:
+            return GameState.TITLE
+        
+def play_level_3(screen, player, story):
+    story.enter_scene("The Castle Proper")
+    return_btn, inventory_btn = nav_buttons(screen, player)
 
 
     
