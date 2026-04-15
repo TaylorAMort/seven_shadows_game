@@ -1,6 +1,7 @@
 import pygame
 import assets.assets as asset_loader
-from events import *
+from gamefunctions.storystate import StoryState
+from gamefunctions.events import *
 from UI_focus.buttons import GameState
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -12,6 +13,7 @@ def main():
     clock = pygame.time.Clock()
     player = None
     assets = asset_loader.load_all()
+    story = StoryState()
     
     while True:
         clock.tick(60)
@@ -24,9 +26,13 @@ def main():
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
         if game_state == GameState.PLAYING:
-            game_state = play_level_1(screen, player)
+            game_state = play_level_1(screen, player, story)
         if game_state == GameState.LEVEL_2:
-            game_state = play_level_2(screen, player)
+            result = play_level_2(screen, player, story)
+            if result == GameState.PLAYING:
+                pass
+            else:
+                game_state = result
         if game_state == GameState.QUIT:
             pygame.quit()
             return

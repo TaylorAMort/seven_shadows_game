@@ -58,9 +58,6 @@ class Button(Sprite):
             subsubtitle_rect = self.subsubtitle_surf.get_rect(centerx=self.rect().centerx, top=self.rect().bottom + 4 + self.subtitle_surf.get_height() + 2)
             surface.blit(self.subsubtitle_surf, subsubtitle_rect)
 
-# Keep old names as aliases for backwards compatibility
-TextButton = Button
-ImageButton = Button
 
 class GameState(Enum):
     QUIT = -1

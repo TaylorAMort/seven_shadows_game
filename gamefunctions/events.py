@@ -315,12 +315,15 @@ def play_level_1(screen, player):
         else:
             return GameState.TITLE
         
-def play_level_2(screen, player):
+def play_level_2(screen, player, story):
+    story.enter_scene("End of the Hallway")
+    story.
     return_btn, inventory_btn = nav_buttons(screen, player)
     lines = [
         "Your steps echo through the abandoned hallway.",
         "Up ahead, you see a thin light flickering. A door, forgotten by time.",
-        "As you press it open, you see an empty room, the furniture broken and decayed."
+        "As you press it open, you see an empty room, the furniture broken and decayed.",
+        "On the left wall, another door stands, the flickering of torchlight coming from the other side."
     ]
 
     def draw_lines(surface):
@@ -330,4 +333,25 @@ def play_level_2(screen, player):
             surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
             y += 40
     
+    look_around_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Look around the room",
+        action=GameState.PLAYING,
+        border_rgb=(255, 255, 255),
+    )
+
+    Leave_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2 + 50),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Go through the door",
+        action=GameState.LEVEL_3,
+        border_rgb=(255, 255, 255),
+    )
+
+
     

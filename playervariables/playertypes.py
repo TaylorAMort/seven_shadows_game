@@ -1,5 +1,5 @@
 import random
-from playervariables.weapontypes import Weapon, HealthPotion
+from playervariables.objects import Weapon, HealthPotion
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 
 class Player:
