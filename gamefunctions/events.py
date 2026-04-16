@@ -6,6 +6,8 @@ from playervariables.playertypes import *
 from constants import *
 from pygame.sprite import RenderUpdates
 
+
+
 def nav_buttons(screen, player):
     return_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
@@ -17,7 +19,7 @@ def nav_buttons(screen, player):
     )
 
     inventory_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3),
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.25),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -311,7 +313,7 @@ def play_level_1(screen, player, story):
         if result == GameState.INVENTORY:
             inventory_screen(screen, player)
         elif result == GameState.LEVEL_2:
-            play_level_2(screen, player, story)
+            return GameState.LEVEL_2
         else:
             return GameState.TITLE
         
@@ -336,39 +338,36 @@ def play_level_2(screen, player, story):
         ]
         story.make_choice("Found note in hallway")
 
-        Go_back_btn = Button(
-            center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
-            font_size=20,
-            bg_rgb=(0, 0, 0),
-            text_rgb=(255, 255, 255),
-            text="Go back",
-            action=GameState.PLAYING,
-            border_rgb=(255, 255, 255),
-        )
     else:
         lines = [
             "The room is still empty and desolate."
         ]
 
+    text_start_y = SCREEN_HEIGHT // 5
+    line_height = 40
+    text_end_y = text_start_y + len(lines) * line_height
+    button_y = text_end_y + 40
+    row = [(SCREEN_WIDTH // 3 * (i + 1), button_y) for i in range(2)]
+
     def draw_lines(surface):
-        y = SCREEN_HEIGHT // 5
+        y = text_start_y
         for line in lines:
             surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
             surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
-            y += 40
-    
+            y += line_height
+
     look_around_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        center_position=(row[0]),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
         text="Look around the room",
-        action=GameState.PLAYING,
+        action=GameState.REPEAT,
         border_rgb=(255, 255, 255),
     )
-
+    leave_pos = (SCREEN_WIDTH // 2, button_y) if round >= 2 else row[1]
     Leave_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2 + 50),
+        center_position=(leave_pos),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -376,11 +375,28 @@ def play_level_2(screen, player, story):
         action=GameState.LEVEL_3,
         border_rgb=(255, 255, 255),
     )
-    buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, Leave_btn, Go_back_btn if round == 1 else None)
+    Go_back_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, button_y),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Go back",
+        action=GameState.REPEAT,
+        border_rgb=(255, 255, 255),
+    )
+    buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, Leave_btn)
+    if round == 2:
+        buttons.add(Go_back_btn)
+        buttons.remove(look_around_btn)
+        buttons.remove(Leave_btn)
+    if round == 3:
+        buttons.remove(look_around_btn)
     while True:
         result = game_loop(screen, buttons, extra_draw_callback=draw_lines)
         if result == GameState.INVENTORY:
             inventory_screen(screen, player)
+        elif result == GameState.REPEAT:
+            return GameState.REPEAT
         elif result == GameState.LEVEL_3:
             return GameState.LEVEL_3
         else:

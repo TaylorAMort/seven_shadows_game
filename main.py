@@ -29,7 +29,7 @@ def main():
             game_state = play_level_1(screen, player, story)
         if game_state == GameState.LEVEL_2:
             result = play_level_2(screen, player, story)
-            if result == GameState.PLAYING:
+            if result == GameState.REPEAT:
                 pass
             else:
                 game_state = result
