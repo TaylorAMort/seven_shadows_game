@@ -404,7 +404,7 @@ def play_level_3(screen, player, story):
     return_btn, inventory_btn = nav_buttons(screen, player)
     story.enter_scene("The Castle Proper")
     round = story.rounds("The Castle Proper")
-    
+    row = [(SCREEN_WIDTH // 3 * (i + 1), button_y(lines)) for i in range(2)]
     if round == 1:
         lines = [
         "You enter an older section of the castle proper, the torches lit but the walls cracked and crumbling.",
@@ -438,10 +438,12 @@ def play_level_3(screen, player, story):
             lines.append("You fail to sneak past the monster and alert it to your presence. It roars and lunges.")
             story.make_choice("Failed to sneak past the monster in the hallway")
     else:
-        lines = []
+        lines = ["filler"]
+
+
 
     continue_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        center_position=(SCREEN_WIDTH // 2, button_y(lines)),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -450,7 +452,7 @@ def play_level_3(screen, player, story):
         border_rgb=(255, 255, 255),
     )
     draw_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        center_position=(row[0]),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -460,7 +462,7 @@ def play_level_3(screen, player, story):
         choice="Fight the monster in the hallway"
     )
     sneak_btn = Button(
-        center_position=(SCREEN_WIDTH // 3, SCREEN_HEIGHT // 3 * 2),
+        center_position=(row[1]),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
