@@ -72,9 +72,22 @@ def game_loop(screen, buttons, extra_draw_callback=None):
         for button in buttons:
             ui_action = button.update(pygame.mouse.get_pos(), mouse_up)
             if ui_action is not None:
-                return ui_action
+                return button
             button.draw(screen)
         pygame.display.flip()
+
+def draw_lines(surface, lines):
+    y = TEXT_START_Y
+    for line in lines:
+        surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
+        surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
+        y += LINE_HEIGHT
+
+def text_end_y(lines):
+    return TEXT_START_Y + len(lines) * LINE_HEIGHT
+
+def button_y(lines):
+    return text_end_y(lines) + LINE_HEIGHT
 
 def title_screen(screen):
     start_btn = Button(
@@ -104,7 +117,7 @@ def title_screen(screen):
     title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
 
     buttons = RenderUpdates(start_btn, quit_btn)
-    return game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(title, title_rect))
+    return game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(title, title_rect)).action
 
 def get_player_name(screen, clock, assets):
 
@@ -273,7 +286,7 @@ def class_selection_screen(screen, name, assets):
         subsubtitle="Moderate boost to wisdom"
     )
     buttons = RenderUpdates(shadow_btn, flame_btn, blood_btn, memory_btn, stone_btn, tide_btn, wind_btn)
-    player = game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(selection, selection_rect))
+    player = game_loop(screen, buttons, extra_draw_callback=lambda surface: surface.blit(selection, selection_rect)).action
     
     return player
     
@@ -289,13 +302,6 @@ def play_level_1(screen, player, story):
         f"But you are far from damned {player.name}."
     ]
 
-    def draw_lines(surface):
-        y = SCREEN_HEIGHT // 5
-        for line in lines:
-            surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
-            surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
-            y += 40
-
     continue_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
         font_size=20,
@@ -309,10 +315,10 @@ def play_level_1(screen, player, story):
     buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)
 
     while True:
-        result = game_loop(screen, buttons, extra_draw_callback=draw_lines)
-        if result == GameState.INVENTORY:
+        result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
+        if result.action == GameState.INVENTORY:
             inventory_screen(screen, player)
-        elif result == GameState.LEVEL_2:
+        elif result.action == GameState.LEVEL_2:
             return GameState.LEVEL_2
         else:
             return GameState.TITLE
@@ -343,18 +349,8 @@ def play_level_2(screen, player, story):
             "The room is still empty and desolate."
         ]
 
-    text_start_y = SCREEN_HEIGHT // 5
-    line_height = 40
-    text_end_y = text_start_y + len(lines) * line_height
-    button_y = text_end_y + 40
-    row = [(SCREEN_WIDTH // 3 * (i + 1), button_y) for i in range(2)]
+    row = [(SCREEN_WIDTH // 3 * (i + 1), button_y(lines)) for i in range(2)]
 
-    def draw_lines(surface):
-        y = text_start_y
-        for line in lines:
-            surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
-            surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
-            y += line_height
 
     look_around_btn = Button(
         center_position=(row[0]),
@@ -365,7 +361,7 @@ def play_level_2(screen, player, story):
         action=GameState.REPEAT,
         border_rgb=(255, 255, 255),
     )
-    leave_pos = (SCREEN_WIDTH // 2, button_y) if round >= 2 else row[1]
+    leave_pos = (SCREEN_WIDTH // 2, button_y(lines)) if round >= 2 else row[1]
     Leave_btn = Button(
         center_position=(leave_pos),
         font_size=20,
@@ -376,7 +372,7 @@ def play_level_2(screen, player, story):
         border_rgb=(255, 255, 255),
     )
     Go_back_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, button_y),
+        center_position=(SCREEN_WIDTH // 2, button_y(lines)),
         font_size=20,
         bg_rgb=(0, 0, 0),
         text_rgb=(255, 255, 255),
@@ -392,19 +388,116 @@ def play_level_2(screen, player, story):
     if round == 3:
         buttons.remove(look_around_btn)
     while True:
-        result = game_loop(screen, buttons, extra_draw_callback=draw_lines)
-        if result == GameState.INVENTORY:
+        result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
+        if result.action == GameState.INVENTORY:
             inventory_screen(screen, player)
-        elif result == GameState.REPEAT:
+        elif result.action == GameState.REPEAT:
             return GameState.REPEAT
-        elif result == GameState.LEVEL_3:
+        elif result.action == GameState.LEVEL_3:
             return GameState.LEVEL_3
         else:
             return GameState.TITLE
         
 def play_level_3(screen, player, story):
+    monster = Player("Monster", 100, 20, 5, 5, 5)
     story.enter_scene("The Castle Proper")
     return_btn, inventory_btn = nav_buttons(screen, player)
+    story.enter_scene("The Castle Proper")
+    round = story.rounds("The Castle Proper")
+    
+    if round == 1:
+        lines = [
+        "You enter an older section of the castle proper, the torches lit but the walls cracked and crumbling.",
+        "Now, past the dungeon, the real danger awaits you.",
+        "You must find the Hilt of the Shadows here. Only then can you set things right.",
+        "The castle crawls with ancient beasts tamed by modern monsters. Be on your guard."
+        ]
+
+    elif round == 2:
+        lines = [
+            "You continue down the hallway, your footsteps echoing in the silence.",
+            "It's a feeling before anything else. The hairs on the back of your neck stand up, and you know something is watching you.",
+            "The air in front of you shivers and distorts, the shape monstrously huge.",
+            "What do you do?"
+        ]
+    elif round == 3 and story.has_made_choice("Fight the monster in the hallway"):
+        lines = [
+            "You draw your weapon and prepare to fight.",
+            "The monster materializes, a lizard-like beast with horns protruding from all over its body. It roars and lunges."
+        ]
+    
+    elif round == 3 and story.has_made_choice("Sneak past the monster in the hallway"):
+        lines = [
+            "You try to sneak past the monster, holding your breath and moving as silently as possible.",
+        ]
+        sneaking = player.sneak(monster)
+        if sneaking == True:
+            lines.append("You successfully sneak past the monster and continue down the hallway.")
+            story.make_choice("Successfully sneaked past the monster in the hallway")
+        else: 
+            lines.append("You fail to sneak past the monster and alert it to your presence. It roars and lunges.")
+            story.make_choice("Failed to sneak past the monster in the hallway")
+    else:
+        lines = []
+
+    continue_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Walk down the hallway",
+        action=GameState.REPEAT,
+        border_rgb=(255, 255, 255),
+    )
+    draw_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Draw your weapon",
+        action=GameState.REPEAT,
+        border_rgb=(255, 255, 255),
+        choice="Fight the monster in the hallway"
+    )
+    sneak_btn = Button(
+        center_position=(SCREEN_WIDTH // 3, SCREEN_HEIGHT // 3 * 2),
+        font_size=20,
+        bg_rgb=(0, 0, 0),
+        text_rgb=(255, 255, 255),
+        text="Try to sneak past",
+        action=GameState.REPEAT,
+        border_rgb=(255, 255, 255),
+        choice="Sneak past the monster in the hallway"
+    )
+
+    buttons = RenderUpdates(return_btn, inventory_btn, continue_btn, draw_btn, sneak_btn)
+    if round == 2:
+        buttons.remove(continue_btn)
+        buttons.add(draw_btn)
+        buttons.add(sneak_btn)
+    if round == 3:
+        buttons.remove(continue_btn)
+        buttons.remove(draw_btn)
+        buttons.remove(sneak_btn)
+    
+    while True:
+        result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
+        if result.action == GameState.INVENTORY:
+            inventory_screen(screen, player)
+        elif result.action == GameState.REPEAT:
+            if result.choice == "Fight the monster in the hallway":
+                story.make_choice("Fight the monster in the hallway")
+            elif result.choice == "Sneak past the monster in the hallway":
+                story.make_choice("Sneak past the monster in the hallway")
+            return GameState.REPEAT
+        elif result.action == GameState.LEVEL_4:
+            return GameState.LEVEL_4
+        else:
+            return GameState.TITLE
+
+
+
+
 
 
     

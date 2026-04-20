@@ -34,19 +34,16 @@ class Player:
         )
 
     def sneak(self, other):
+        passed = False
         if self.dexterity + random.randint(1, 20) > other.wisdom + random.randint(1, 20):
-            return create_surface_with_text(
-                text=f"You successfully sneak past {other.name}!",
-                font_size=10,
-                text_rgb=(255, 255, 255),
-                bg_rgb=(0, 0, 0)
-            )
+            passed = True
         return create_surface_with_text(
-            text=f"You fail to sneak past {other.name} and alert them to your presence!",
+            text=f"You {"successfully" if passed else "fail to"} sneak past {other.name}!",
             font_size=10,
             text_rgb=(255, 255, 255),
-            bg_rgb=(0, 0, 0)
-        )
+                bg_rgb=(0, 0, 0)
+            ), passed
+
         
 
 class Shadow(Player):

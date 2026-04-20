@@ -5,11 +5,12 @@ from enum import Enum
 
 class Button(Sprite):
     def __init__(self, center_position, text, font_size, text_rgb, bg_rgb,
-                 action=None, image=None, subtitle=None, subsubtitle=None, border_rgb=None):
+                 action=None, image=None, subtitle=None, subsubtitle=None, border_rgb=None, choice=None):
         self.mouse_over = False
         self.action = action
         self.border_rgb = border_rgb
         self.symbol = image
+        self.choice = choice
         default_image = create_surface_with_text(text=text, font_size=font_size, text_rgb=text_rgb, bg_rgb=bg_rgb)
         highlighted_image = create_surface_with_text(
             text=text, font_size=font_size * 1.2, text_rgb=text_rgb, bg_rgb=bg_rgb
