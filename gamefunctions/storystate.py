@@ -2,6 +2,7 @@ class StoryState:
     def __init__(self):
         self.scene_rounds = {}
         self.choices = set()
+        self.current_monster = None
 
     def enter_scene(self, scene_name):
         if scene_name not in self.scene_rounds:

@@ -15,15 +15,12 @@ class Player:
                           HealthPotion("Minor Healing Potion", 20, "A small vial filled with a red liquid. Restores a small amount of health when consumed.")]
     
     def attack(self, other, weapon):
+        alive = True
         damage = self.strength + weapon.damage
         other.health -= damage
-        return create_surface_with_text(
-            text=f"You attack {other.name} with {weapon.name} for {damage} damage! {other.name} has {other.health} health remaining.",
-            font_size=10,
-            text_rgb=(255, 255, 255),
-            bg_rgb=(0, 0, 0)
-        )
-        
+        if other.health < 0: 
+            alive = False
+        return damage, alive
     
     def defend(self, damage):
         return create_surface_with_text(
@@ -37,12 +34,7 @@ class Player:
         passed = False
         if self.dexterity + random.randint(1, 20) > other.wisdom + random.randint(1, 20):
             passed = True
-        return create_surface_with_text(
-            text=f"You {"successfully" if passed else "fail to"} sneak past {other.name}!",
-            font_size=10,
-            text_rgb=(255, 255, 255),
-                bg_rgb=(0, 0, 0)
-            ), passed
+        return passed
 
         
 

@@ -69,3 +69,4 @@ class GameState(Enum):
     REPEAT = 4
     LEVEL_2 = 5
     LEVEL_3 = 6
+    FIGHT = 7

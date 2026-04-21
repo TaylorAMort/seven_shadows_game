@@ -1,7 +1,7 @@
 import pygame
 import assets.assets as asset_loader
 from gamefunctions.storystate import StoryState
-from gamefunctions.events import *
+from gamefunctions.levels import *
 from UI_focus.buttons import GameState
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -25,6 +25,8 @@ def main():
             game_state = GameState.PLAYING
         if game_state == GameState.INVENTORY:
             game_state = inventory_screen(screen, player)
+        if game_state == GameState.FIGHT:
+            game_state = fight_screen(screen, player, story)
         if game_state == GameState.PLAYING:
             game_state = play_level_1(screen, player, story)
         if game_state == GameState.LEVEL_2:
