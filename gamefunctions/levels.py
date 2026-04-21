@@ -1,10 +1,10 @@
-import pygame
 from UI_focus.buttons import *
-from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
+from UI_focus.UI_functions import *
 from playervariables.playertypes import *
 from constants import *
+from gamefunctions.screens import inventory_screen
 from pygame.sprite import RenderUpdates
-from UI_functions import *
+
 
 
 
@@ -21,11 +21,11 @@ def play_level_1(screen, player, story):
     continue_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Go further into the dungeon",
         action=GameState.LEVEL_2,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
     )
 
     buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)
@@ -71,30 +71,30 @@ def play_level_2(screen, player, story):
     look_around_btn = Button(
         center_position=(row[0]),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Look around the room",
         action=GameState.REPEAT,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
     )
     leave_pos = (SCREEN_WIDTH // 2, button_y(lines)) if round >= 2 else row[1]
     Leave_btn = Button(
         center_position=(leave_pos),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Go through the door",
         action=GameState.LEVEL_3,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
     )
     Go_back_btn = Button(
         center_position=(SCREEN_WIDTH // 2, button_y(lines)),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Go back",
         action=GameState.REPEAT,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
     )
     buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, Leave_btn)
     if round == 2:
@@ -156,6 +156,7 @@ def play_level_3(screen, player, story):
             lines.append("You fail to sneak past the monster and alert it to your presence. It roars and lunges.")
             story.make_choice("Failed to sneak past the monster in the hallway")
     elif round == 4: 
+        pass
     else:
         lines = ["filler"]
 
@@ -164,40 +165,40 @@ def play_level_3(screen, player, story):
     continue_btn = Button(
         center_position=(SCREEN_WIDTH // 2, button_y(lines)),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Walk down the hallway",
         action=GameState.REPEAT,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
     )
     draw_btn = Button(
         center_position=(row[0]),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Draw your weapon",
         action=GameState.REPEAT,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
         choice="Fight the monster in the hallway"
     )
     sneak_btn = Button(
         center_position=(row[1]),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Try to sneak past",
         action=GameState.REPEAT,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
         choice="Sneak past the monster in the hallway"
     )
     attack_btn = Button(
         center_position=(SCREEN_WIDTH // 2, button_y(lines)),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Attack",
         action=GameState.FIGHT,
-        border_rgb=(255, 255, 255),
+        border_rgb=WHITE,
     )
 
     buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)

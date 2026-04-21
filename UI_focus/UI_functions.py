@@ -1,7 +1,8 @@
 import pygame
 from UI_focus.buttons import GameState, Button
 from UI_focus.font_render import create_surface_with_text
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, TEXT_START_Y, LINE_HEIGHT
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, TEXT_START_Y, LINE_HEIGHT, BLACK, WHITE
+
 
 
 def game_loop(screen, buttons, extra_draw_callback=None):
@@ -29,8 +30,8 @@ def nav_buttons(screen, player):
     return_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Return to main menu",
         action=GameState.TITLE,
     )
@@ -38,8 +39,8 @@ def nav_buttons(screen, player):
     inventory_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.25),
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Inventory",
         action=GameState.INVENTORY,
     )
@@ -48,7 +49,7 @@ def nav_buttons(screen, player):
 def draw_lines(surface, lines):
     y = TEXT_START_Y
     for line in lines:
-        surf = create_surface_with_text(line, 20, (255, 255, 255), (0, 0, 0))
+        surf = create_surface_with_text(line, 20, WHITE, BLACK)
         surface.blit(surf, surf.get_rect(centerx=SCREEN_WIDTH // 2, y=y))
         y += LINE_HEIGHT
 

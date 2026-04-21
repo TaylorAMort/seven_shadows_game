@@ -2,7 +2,6 @@ from pathlib import Path
 import pygame
 import pygame.freetype
 
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 FANCY_FONT = Path(__file__).resolve().parent.parent / "fonts" / "elvencommonspeak-2.ttf"
 

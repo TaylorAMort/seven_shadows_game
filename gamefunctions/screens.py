@@ -1,4 +1,5 @@
 import pygame
+from UI_focus.UI_functions import game_loop
 from UI_focus.buttons import GameState, Button
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 from playervariables.playertypes import *
@@ -13,8 +14,8 @@ def inventory_screen(screen, player):
             object = create_surface_with_text(
                 text=f"{item.name}: {item.description}",
                 font_size=20,
-                text_rgb=(255, 255, 255),
-                bg_rgb=(0, 0, 0),
+                text_rgb=WHITE,
+                bg_rgb=BLACK,
             )
             surface.blit(object, object.get_rect(left= 30, y=y))
             y += 40    
@@ -23,8 +24,8 @@ def inventory_screen(screen, player):
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         image=None,
         font_size=20,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Return to game",
         action=GameState.PLAYING,
     )
@@ -34,22 +35,23 @@ def inventory_screen(screen, player):
 
 
 def fight_screen(screen, player, story):
+    pass
 
 
 def title_screen(screen):
     start_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50),
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Start",
         action=GameState.NEWGAME,
     )
     quit_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2.5),
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Quit",
         action=GameState.QUIT,
     )
@@ -57,8 +59,8 @@ def title_screen(screen):
     title = create_surface_with_text_fancy(
         text="Seven Shadows of the Shattered Blade",
         font_size=80,
-        text_rgb=(255, 255, 255),
-        bg_rgb=(0, 0, 0),
+        text_rgb=WHITE,
+        bg_rgb=BLACK,
     )
 
     title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
@@ -99,8 +101,8 @@ def get_player_name(screen, clock, assets):
         title_surf = create_surface_with_text(
             text="Enter your name:",
             font_size=36,
-            text_rgb=(255, 255, 255),
-            bg_rgb=(0, 0, 0),
+            text_rgb=WHITE,
+            bg_rgb=BLACK,
         )
         screen.blit(title_surf, title_surf.get_rect(centerx=SCREEN_WIDTH // 2, y=180))
 
@@ -121,8 +123,8 @@ def get_player_name(screen, clock, assets):
         hint_surf = create_surface_with_text(
             text="Press Enter to confirm",
             font_size=18,
-            text_rgb=(255, 255, 255),
-            bg_rgb=(0, 0, 0),
+            text_rgb=WHITE,
+            bg_rgb=BLACK,
         )
         screen.blit(hint_surf, hint_surf.get_rect(centerx=SCREEN_WIDTH // 2, y=box_rect.bottom + 18))
 
@@ -138,8 +140,8 @@ def class_selection_screen(screen, name, assets):
     selection = create_surface_with_text(
         text=f"Welcome, {name}. Select your class:",
         font_size=40,
-        text_rgb=(255, 255, 255),
-        bg_rgb=(0, 0, 0),
+        text_rgb=WHITE,
+        bg_rgb=BLACK,
     )
 
     selection_rect = selection.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
@@ -152,8 +154,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_1[0],
         image=assets["SHADOW_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Shadow",
         action=Shadow(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to dexterity",
@@ -164,8 +166,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_2[2],
         image=assets["FLAME_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Flame",
         action=Flame(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to strength",
@@ -176,8 +178,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_2[0],
         image=assets["BLOOD_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Blood",
         action=Blood(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to intelligence",
@@ -189,8 +191,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_1[3],
         image=assets["MEMORY_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Memory",
         action=Memory(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to wisdom",
@@ -201,8 +203,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_1[2],
         image=assets["STONE_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Stone",
         action=Stone(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to strength",
@@ -213,8 +215,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_1[1],
         image=assets["TIDE_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Tide",
         action=Tide(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to intelligence",
@@ -225,8 +227,8 @@ def class_selection_screen(screen, name, assets):
         center_position=positions_row_2[1],
         image=assets["WIND_IMAGE"],
         font_size=30,
-        bg_rgb=(0, 0, 0),
-        text_rgb=(255, 255, 255),
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
         text="Wind",
         action=Wind(name, 100, 10, 10, 10, 10),
         subtitle="Large boost to dexterity",
