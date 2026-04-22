@@ -23,18 +23,20 @@ class Player:
         return damage, alive
     
     def defend(self, damage):
-        return create_surface_with_text(
-            text=f"You defend against the attack and take {damage // 2} damage!",
-            font_size=10,
-            text_rgb=(255, 255, 255),
-            bg_rgb=(0, 0, 0)
-        )
+        self.health -= damage // 2
+        return damage // 2
 
     def sneak(self, other):
         passed = False
         if self.dexterity + random.randint(1, 20) > other.wisdom + random.randint(1, 20):
             passed = True
         return passed
+    
+    def run(self, other):
+        escaped = False
+        if self.dexterity + random.randint(1, 20) > other.dexterity + random.randint(1, 20):
+            escaped = True
+        return escaped
 
         
 

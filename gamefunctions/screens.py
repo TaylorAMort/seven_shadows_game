@@ -1,5 +1,4 @@
 import pygame
-from UI_focus.UI_functions import game_loop
 from UI_focus.buttons import GameState, Button
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 from playervariables.playertypes import *
@@ -35,7 +34,51 @@ def inventory_screen(screen, player):
 
 
 def fight_screen(screen, player, story):
-    pass
+    rtn_btn, inventory_btn = nav_buttons(screen, player)
+    monster = story.current_monster()
+    attack_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
+        image=None,
+        font_size=20,
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
+        text="Attack",
+        choice="Attack"
+    )
+    defend_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 60),
+        image=None,
+        font_size=20,
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
+        text="Defend",
+        Choice="Defend"
+    )
+    run_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 120),
+        image=None,
+        font_size=20,
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
+        text="Run",
+        choice="Run"
+    )
+    buttons = RenderUpdates(rtn_btn, inventory_btn, attack_btn, defend_btn, run_btn)
+    while True:
+        result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
+        if result.action == GameState.INVENTORY:
+            inventory_screen(screen, player)
+        elif result.choice == "Attack":
+            player.attack(monster, player.inventory[0])
+            if monster.health > 0:
+                return (f"The {monster.name} has taken {damage}")
+        elif result.choice == "Defend":
+            player.defend(monster.attack(player))
+        elif result.choice == "Run":
+            player.run(monster)
+        else:
+            return GameState.Title
+        
 
 
 def title_screen(screen):
@@ -96,7 +139,7 @@ def get_player_name(screen, clock, assets):
                     if len(name) < 20:
                         name += event.unicode
 
-        screen.fill((0, 0, 0))
+        screen.fill(WHITE)
 
         title_surf = create_surface_with_text(
             text="Enter your name:",
@@ -113,8 +156,8 @@ def get_player_name(screen, clock, assets):
         name_surf = create_surface_with_text(
             text=name,
             font_size=28,
-            text_rgb=(255, 255, 255),
-            bg_rgb=(0, 0, 0),
+            text_rgb=(BLACK),
+            bg_rgb=(WHITE),
         )
         text_x = box_rect.x + 14
         text_y = box_rect.centery - name_surf.get_height() // 2

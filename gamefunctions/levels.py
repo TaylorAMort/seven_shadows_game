@@ -78,7 +78,7 @@ def play_level_2(screen, player, story):
         border_rgb=WHITE,
     )
     leave_pos = (SCREEN_WIDTH // 2, button_y(lines)) if round >= 2 else row[1]
-    Leave_btn = Button(
+    leave_btn = Button(
         center_position=(leave_pos),
         font_size=20,
         bg_rgb=BLACK,
@@ -87,7 +87,7 @@ def play_level_2(screen, player, story):
         action=GameState.LEVEL_3,
         border_rgb=WHITE,
     )
-    Go_back_btn = Button(
+    go_back_btn = Button(
         center_position=(SCREEN_WIDTH // 2, button_y(lines)),
         font_size=20,
         bg_rgb=BLACK,
@@ -98,9 +98,9 @@ def play_level_2(screen, player, story):
     )
     buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, Leave_btn)
     if round == 2:
-        buttons.add(Go_back_btn)
+        buttons.add(go_back_btn)
         buttons.remove(look_around_btn)
-        buttons.remove(Leave_btn)
+        buttons.remove(leave_btn)
     if round == 3:
         buttons.remove(look_around_btn)
     while True:
@@ -156,6 +156,7 @@ def play_level_3(screen, player, story):
             lines.append("You fail to sneak past the monster and alert it to your presence. It roars and lunges.")
             story.make_choice("Failed to sneak past the monster in the hallway")
     elif round == 4: 
+        lines = []
         pass
     else:
         lines = ["filler"]
@@ -206,6 +207,7 @@ def play_level_3(screen, player, story):
         buttons.remove(continue_btn)
         buttons.add(draw_btn)
         buttons.add(sneak_btn)
+        buttons.add(attack_btn)
     if round == 3:
         buttons.remove(continue_btn)
         buttons.remove(draw_btn)
