@@ -70,3 +70,4 @@ class GameState(Enum):
     LEVEL_2 = 5
     LEVEL_3 = 6
     FIGHT = 7
+    FIGHT_DONE = 8

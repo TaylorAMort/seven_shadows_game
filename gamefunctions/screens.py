@@ -1,4 +1,5 @@
 import pygame
+from pygame import surface
 from UI_focus.buttons import GameState, Button
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 from playervariables.playertypes import *
@@ -36,6 +37,8 @@ def inventory_screen(screen, player):
 def fight_screen(screen, player, story):
     rtn_btn, inventory_btn = nav_buttons(screen, player)
     monster = story.current_monster()
+
+    lines = [f"The {monster.name} sniffs the air, awaiting its moment to strike."]
     attack_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
         image=None,
@@ -52,7 +55,7 @@ def fight_screen(screen, player, story):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Defend",
-        Choice="Defend"
+        choice="Defend"
     )
     run_btn = Button(
         center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 120),
@@ -63,21 +66,64 @@ def fight_screen(screen, player, story):
         text="Run",
         choice="Run"
     )
+    resume_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 180),
+        image=None,
+        font_size=20,
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
+        text="Return",
+        choice="Return to level"
+    )
+    
     buttons = RenderUpdates(rtn_btn, inventory_btn, attack_btn, defend_btn, run_btn)
+    
     while True:
         result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
+        counter = 0
         if result.action == GameState.INVENTORY:
             inventory_screen(screen, player)
         elif result.choice == "Attack":
-            player.attack(monster, player.inventory[0])
-            if monster.health > 0:
-                return (f"The {monster.name} has taken {damage}")
+            damage, alive = player.attack(monster, player.inventory[0])
+            if alive == True:
+                lines = [f"You attacked the {monster.name} for {damage} damage!"]
+                counter += 1
+            else:
+                lines = [[f"You have defeated the {monster.name}!"]]
+                buttons.remove(attack_btn, defend_btn, run_btn)
+                buttons.add(resume_btn)
+                if result.choice == "Return to level":
+                    return story.fight_return
         elif result.choice == "Defend":
-            player.defend(monster.attack(player))
+            defense = player.defend(monster.attack(player))
+            lines = [f"You defended against the attack, taking only {defense} damage!"]
+            counter += 1
         elif result.choice == "Run":
-            player.run(monster)
+            ran = player.run(monster)
+            if ran == True:
+                lines = [f"You successfully escaped from the {monster.name}!"]
+                buttons.remove(attack_btn, defend_btn, run_btn)
+                buttons.add(resume_btn)
+                if result.choice == "Return to level":
+                    return story.fight_return
+            else:
+                lines = [f"You failed to escape from the {monster.name}!"]
+                counter += 1
+        elif counter > 0: 
+            attack, alive = monster.attack(player, None)
+            if alive == True:
+                lines == [f"The {monster.name} attacked you for {attack} damage!", 
+                          "Current health: {player.health}"]
+                counter = 0
+            else:
+                lines = [f"The {monster.name} has defeated you...", 
+                         "You awaken at the entrance of the dungeon, your wounds miraculously healed but your memories of the fight lost."]
+                buttons.remove(attack_btn, defend_btn, run_btn)
+                buttons.add(resume_btn)
+                if result.choice == "Return to level":
+                    return story.fight_return
         else:
-            return GameState.Title
+            return GameState.TITLE
         
 
 

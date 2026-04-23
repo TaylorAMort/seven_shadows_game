@@ -223,6 +223,9 @@ def play_level_3(screen, player, story):
             elif result.choice == "Sneak past the monster in the hallway":
                 story.make_choice("Sneak past the monster in the hallway")
             return GameState.REPEAT
+        elif result.action == GameState.FIGHT:
+            story.fight_return = GameState.LEVEL_3
+            return GameState.FIGHT
         elif result.action == GameState.LEVEL_4:
             return GameState.LEVEL_4
         else:

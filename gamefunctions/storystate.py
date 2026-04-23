@@ -3,6 +3,7 @@ class StoryState:
         self.scene_rounds = {}
         self.choices = set()
         self.current_monster = None
+        self.fight_return = None
 
     def enter_scene(self, scene_name):
         if scene_name not in self.scene_rounds:
@@ -17,3 +18,6 @@ class StoryState:
 
     def has_made_choice(self, choice_name):
         return choice_name in self.choices
+    
+    
+        
