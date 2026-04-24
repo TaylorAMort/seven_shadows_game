@@ -96,7 +96,7 @@ def play_level_2(screen, player, story):
         action=GameState.REPEAT,
         border_rgb=WHITE,
     )
-    buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, Leave_btn)
+    buttons = RenderUpdates(return_btn, inventory_btn, look_around_btn, leave_btn)
     if round == 2:
         buttons.add(go_back_btn)
         buttons.remove(look_around_btn)
@@ -161,7 +161,7 @@ def play_level_3(screen, player, story):
     else:
         lines = ["filler"]
 
-    row = [(SCREEN_WIDTH // 3 * (i + 1), button_y(lines)) for i in range(2)]
+    row = [(SCREEN_WIDTH // 3 * (i + 1), button_y(lines)) for i in range(3)]
 
     continue_btn = Button(
         center_position=(SCREEN_WIDTH // 2, button_y(lines)),

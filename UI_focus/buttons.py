@@ -41,7 +41,7 @@ class Button(Sprite):
         if self.rect().collidepoint(mouse_pos):
             self.mouse_over = True
             if mouse_up:
-                return self.action
+                return self.action if self.action is not None else self.choice
         else:
             self.mouse_over = False
 

@@ -36,11 +36,12 @@ def inventory_screen(screen, player):
 
 def fight_screen(screen, player, story):
     rtn_btn, inventory_btn = nav_buttons(screen, player)
-    monster = story.current_monster()
-
+    monster = story.current_monster
+    weapon = story.current_monster_weapon
     lines = [f"The {monster.name} sniffs the air, awaiting its moment to strike."]
+    row = [(SCREEN_WIDTH // 4 * (i + 1), button_y(lines)) for i in range(3)]
     attack_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5),
+        center_position=(row[0]),
         image=None,
         font_size=20,
         bg_rgb=BLACK,
@@ -49,7 +50,7 @@ def fight_screen(screen, player, story):
         choice="Attack"
     )
     defend_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 60),
+        center_position=(row[1]),
         image=None,
         font_size=20,
         bg_rgb=BLACK,
@@ -58,7 +59,7 @@ def fight_screen(screen, player, story):
         choice="Defend"
     )
     run_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 120),
+        center_position=(row[2]),
         image=None,
         font_size=20,
         bg_rgb=BLACK,
@@ -67,7 +68,7 @@ def fight_screen(screen, player, story):
         choice="Run"
     )
     resume_btn = Button(
-        center_position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4 * 3.5 + 180),
+        center_position=(row[1]),
         image=None,
         font_size=20,
         bg_rgb=BLACK,
@@ -77,10 +78,9 @@ def fight_screen(screen, player, story):
     )
     
     buttons = RenderUpdates(rtn_btn, inventory_btn, attack_btn, defend_btn, run_btn)
-    
+    counter = 0
     while True:
         result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
-        counter = 0
         if result.action == GameState.INVENTORY:
             inventory_screen(screen, player)
         elif result.choice == "Attack":
@@ -92,10 +92,8 @@ def fight_screen(screen, player, story):
                 lines = [[f"You have defeated the {monster.name}!"]]
                 buttons.remove(attack_btn, defend_btn, run_btn)
                 buttons.add(resume_btn)
-                if result.choice == "Return to level":
-                    return story.fight_return
         elif result.choice == "Defend":
-            defense = player.defend(monster.attack(player))
+            defense = player.defend(monster.attack(player, story.current_monster_weapon)[0])
             lines = [f"You defended against the attack, taking only {defense} damage!"]
             counter += 1
         elif result.choice == "Run":
@@ -104,15 +102,13 @@ def fight_screen(screen, player, story):
                 lines = [f"You successfully escaped from the {monster.name}!"]
                 buttons.remove(attack_btn, defend_btn, run_btn)
                 buttons.add(resume_btn)
-                if result.choice == "Return to level":
-                    return story.fight_return
             else:
                 lines = [f"You failed to escape from the {monster.name}!"]
                 counter += 1
         elif counter > 0: 
-            attack, alive = monster.attack(player, None)
+            attack, alive = monster.attack(player, story.current_monster_weapons)[0]
             if alive == True:
-                lines == [f"The {monster.name} attacked you for {attack} damage!", 
+                lines = [f"The {monster.name} attacked you for {attack} damage!", 
                           "Current health: {player.health}"]
                 counter = 0
             else:
@@ -120,8 +116,8 @@ def fight_screen(screen, player, story):
                          "You awaken at the entrance of the dungeon, your wounds miraculously healed but your memories of the fight lost."]
                 buttons.remove(attack_btn, defend_btn, run_btn)
                 buttons.add(resume_btn)
-                if result.choice == "Return to level":
-                    return story.fight_return
+        elif result.choice == "Return to level":
+            return story.fight_return
         else:
             return GameState.TITLE
         

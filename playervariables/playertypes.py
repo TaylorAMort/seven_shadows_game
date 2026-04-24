@@ -15,6 +15,8 @@ class Player:
                           HealthPotion("Minor Healing Potion", 20, "A small vial filled with a red liquid. Restores a small amount of health when consumed.")]
     
     def attack(self, other, weapon):
+        if weapon is None:
+            weapon = Weapon("None", 0, "Bare hands")
         alive = True
         damage = self.strength + weapon.damage
         other.health -= damage

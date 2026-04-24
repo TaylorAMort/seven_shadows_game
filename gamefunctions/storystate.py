@@ -3,6 +3,7 @@ class StoryState:
         self.scene_rounds = {}
         self.choices = set()
         self.current_monster = None
+        self.current_monster_weapon = None
         self.fight_return = None
 
     def enter_scene(self, scene_name):
