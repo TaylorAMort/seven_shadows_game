@@ -40,6 +40,10 @@ def fight_screen(screen, player, story):
     weapon = story.current_monster_weapon
     lines = [f"The {monster.name} sniffs the air, awaiting its moment to strike."]
     row = [(SCREEN_WIDTH // 4 * (i + 1), button_y(lines)) for i in range(3)]
+    def reposition_buttons(btns, new_y):
+        for btn in btns:
+            for rect in btn.rects:
+                rect.centery = new_y
     attack_btn = Button(
         center_position=(row[0]),
         image=None,
@@ -47,7 +51,8 @@ def fight_screen(screen, player, story):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Attack",
-        choice="Attack"
+        choice="Attack",
+        border_rgb=WHITE
     )
     defend_btn = Button(
         center_position=(row[1]),
@@ -56,7 +61,8 @@ def fight_screen(screen, player, story):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Defend",
-        choice="Defend"
+        choice="Defend",
+        border_rgb=WHITE
     )
     run_btn = Button(
         center_position=(row[2]),
@@ -65,7 +71,8 @@ def fight_screen(screen, player, story):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Run",
-        choice="Run"
+        choice="Run",
+        border_rgb=WHITE
     )
     resume_btn = Button(
         center_position=(row[1]),
@@ -74,7 +81,8 @@ def fight_screen(screen, player, story):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Return",
-        choice="Return to level"
+        choice="Return to level",
+        border_rgb=WHITE
     )
     
     buttons = RenderUpdates(rtn_btn, inventory_btn, attack_btn, defend_btn, run_btn)
@@ -86,36 +94,46 @@ def fight_screen(screen, player, story):
         elif result.choice == "Attack":
             damage, alive = player.attack(monster, player.inventory[0])
             if alive == True:
-                lines = [f"You attacked the {monster.name} for {damage} damage!"]
-                counter += 1
+                m_damage, p_alive = monster.attack(player, story.current_monster_weapon)
+                lines = [f"You attacked the {monster.name} for {damage} damage!",
+                         f"The {monster.name} attacked for {m_damage} damage!",
+                         f"Your health is {player.health}."]
+                reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
+                if p_alive == False:
+                    lines = [f"You have been defeated by the {monster.name}...",
+                             "You awaken just before the battle, your memories clear but your body whole."]
+                    reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
+                    buttons.remove(attack_btn, defend_btn, run_btn)
+                    buttons.add(resume_btn)
             else:
-                lines = [[f"You have defeated the {monster.name}!"]]
+                lines = [f"You have defeated the {monster.name}!"]
+                reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
                 buttons.remove(attack_btn, defend_btn, run_btn)
                 buttons.add(resume_btn)
         elif result.choice == "Defend":
             defense = player.defend(monster.attack(player, story.current_monster_weapon)[0])
             lines = [f"You defended against the attack, taking only {defense} damage!"]
-            counter += 1
+            reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
         elif result.choice == "Run":
             ran = player.run(monster)
             if ran == True:
                 lines = [f"You successfully escaped from the {monster.name}!"]
+                reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
                 buttons.remove(attack_btn, defend_btn, run_btn)
                 buttons.add(resume_btn)
             else:
-                lines = [f"You failed to escape from the {monster.name}!"]
-                counter += 1
-        elif counter > 0: 
-            attack, alive = monster.attack(player, story.current_monster_weapons)[0]
-            if alive == True:
-                lines = [f"The {monster.name} attacked you for {attack} damage!", 
-                          "Current health: {player.health}"]
-                counter = 0
-            else:
-                lines = [f"The {monster.name} has defeated you...", 
-                         "You awaken at the entrance of the dungeon, your wounds miraculously healed but your memories of the fight lost."]
-                buttons.remove(attack_btn, defend_btn, run_btn)
-                buttons.add(resume_btn)
+                m_damage, p_alive = monster.attack(player, story.current_monster_weapon)
+                if p_alive == True:
+                    lines = [f"You failed to escape from the {monster.name}!",
+                            f"The {monster.name} attacked for {m_damage} damage!",
+                            f"Your health is {player.health}."]
+                    reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
+                else:
+                    lines = [f"You have been defeated by the {monster.name}...",
+                             "You awaken just before the battle, your memories clear but your body whole."]
+                    reposition_buttons([attack_btn, defend_btn, run_btn, resume_btn], button_y(lines))
+                    buttons.remove(attack_btn, defend_btn, run_btn)
+                    buttons.add(resume_btn)
         elif result.choice == "Return to level":
             return story.fight_return
         else:

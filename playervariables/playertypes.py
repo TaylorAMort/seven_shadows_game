@@ -18,7 +18,7 @@ class Player:
         if weapon is None:
             weapon = Weapon("None", 0, "Bare hands")
         alive = True
-        damage = self.strength + weapon.damage
+        damage = self.strength + weapon.damage + random.randint(1, 10)
         other.health -= damage
         if other.health < 0: 
             alive = False
