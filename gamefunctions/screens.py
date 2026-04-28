@@ -216,8 +216,8 @@ def get_player_name(screen, clock, assets):
         name_surf = create_surface_with_text(
             text=name,
             font_size=28,
-            text_rgb=(BLACK),
-            bg_rgb=(WHITE),
+            text_rgb=(WHITE),
+            bg_rgb=(BLACK),
         )
         text_x = box_rect.x + 14
         text_y = box_rect.centery - name_surf.get_height() // 2
