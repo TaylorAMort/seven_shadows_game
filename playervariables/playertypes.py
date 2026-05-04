@@ -3,13 +3,14 @@ from playervariables.objects import Weapon, HealthPotion
 from UI_focus.font_render import create_surface_with_text_fancy, create_surface_with_text
 
 class Player:
-    def __init__(self, name, health, str, dex, int, wis):
+    def __init__(self, name, health, str, dex, int, wis, defense):
         self.name = name
         self.health = health
         self.strength = str
         self.dexterity = dex
         self.intelligence = int
         self.wisdom = wis
+        self.defense = defense
         self.karma = 0
         self.inventory = [Weapon("Rusty Dagger", 5, "A dull and worn dagger. Better than nothing, but not by much."),
                           HealthPotion("Minor Healing Potion", 20, "A small vial filled with a red liquid. Restores a small amount of health when consumed.")]
@@ -18,14 +19,14 @@ class Player:
         if weapon is None:
             weapon = Weapon("None", 0, "Bare hands")
         alive = True
-        damage = self.strength + weapon.damage + random.randint(1, 10)
+        damage = self.strength + weapon.damage + random.randint(1, 10) - other.defense
         other.health -= damage
         if other.health < 0: 
             alive = False
         return damage, alive
     
     def defend(self, damage):
-        self.health -= damage // 2
+        self.health -= damage // 2 - self.defense
         return damage // 2
 
     def sneak(self, other):
@@ -43,44 +44,44 @@ class Player:
         
 
 class Shadow(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.dexterity = dex + 10
         self.intelligence = int + 5
 
 class Flame(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.strength = str + 10
         self.dexterity = dex + 5
 
 class Blood(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.intelligence = int + 10
         self.dexterity = dex + 5
 
 class Memory(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.wisdom = wis + 10
         self.intelligence = int + 5
 
 class Stone(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.strength = str + 10
         self.wisdom = wis + 5
 
 class Tide(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.intelligence = int + 10
         self.dexterity = str + 5
 
 class Wind(Player):
-    def __init__(self, name, health, str, dex, int, wis):
-        super().__init__(name, health, str, dex, int, wis)
+    def __init__(self, name, health, str, dex, int, wis, defense):
+        super().__init__(name, health, str, dex, int, wis, defense)
         self.dexterity = dex + 10
         self.wisdom = wis + 5
 

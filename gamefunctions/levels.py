@@ -115,7 +115,7 @@ def play_level_2(screen, player, story):
             return GameState.TITLE
         
 def play_level_3(screen, player, story):
-    monster = Player("Monster", 100, 20, 5, 5, 5)
+    monster = Player("Monster", 50, 20, 5, 5, 5, 5)
     story.current_monster = monster
     story.enter_scene("The Castle Proper")
     return_btn, inventory_btn = nav_buttons(screen, player)
@@ -149,12 +149,14 @@ def play_level_3(screen, player, story):
         ]
         sneaking = player.sneak(monster)
         if sneaking == True:
-            lines.remove("You try to sneak past the monster, holding your breath and moving as silently as possible.")
-            lines.append("You successfully sneak past the monster, moving with the shadows of the torchlight, and continue down the hallway.")
-            story.make_choice("Successfully sneaked past the monster in the hallway")
+            story.make_choice("Successfully snuck past the monster in the hallway")
+            return GameState.REPEAT
         else: 
+            lines.remove("You try to sneak past the monster, holding your breath and moving as silently as possible.")
             lines.append("You fail to sneak past the monster and alert it to your presence. It roars and lunges.")
             story.make_choice("Failed to sneak past the monster in the hallway")
+    elif round == 4 and story.has_made_choice("Successfully snuck past the monster in the hallway"):
+        lines = ["You successfully sneak past the monster, moving with the shadows of the torchlight, and continue down the hallway."]
     else:
         lines = ["All is quiet in the hallway. All that is left are the flecks of memory of a battle."]
 
@@ -214,7 +216,6 @@ def play_level_3(screen, player, story):
         buttons.remove(continue_btn)
         buttons.add(draw_btn)
         buttons.add(sneak_btn)
-        buttons.add(attack_btn)
     if round == 3:
         buttons.remove(continue_btn)
         buttons.add(attack_btn)
@@ -244,7 +245,7 @@ def play_level_3(screen, player, story):
 def play_level_4(screen, player, story):
     story.enter_scene("The Abandoned Library")
     return_btn, inventory_btn = nav_buttons(screen, player)
-    round = story.roungs("The Abandoned Library")
+    round = story.rounds("The Abandoned Library")
 
 
 

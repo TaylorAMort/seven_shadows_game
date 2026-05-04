@@ -199,7 +199,7 @@ def get_player_name(screen, clock, assets):
                     if len(name) < 20:
                         name += event.unicode
 
-        screen.fill(WHITE)
+        screen.fill(BLACK)
 
         title_surf = create_surface_with_text(
             text="Enter your name:",
@@ -260,7 +260,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Shadow",
-        action=Shadow(name, 100, 10, 10, 10, 10),
+        action=Shadow(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to dexterity",
         subsubtitle="Moderate boost to intelligence"
     )
@@ -272,7 +272,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Flame",
-        action=Flame(name, 100, 10, 10, 10, 10),
+        action=Flame(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to strength",
         subsubtitle="Moderate boost to dexterity"
     )
@@ -284,7 +284,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Blood",
-        action=Blood(name, 100, 10, 10, 10, 10),
+        action=Blood(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to intelligence",
         subsubtitle="Moderate boost to dexterity"
     )
@@ -297,7 +297,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Memory",
-        action=Memory(name, 100, 10, 10, 10, 10),
+        action=Memory(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to wisdom",
         subsubtitle="Moderate boost to intelligence"
     )
@@ -309,7 +309,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Stone",
-        action=Stone(name, 100, 10, 10, 10, 10),
+        action=Stone(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to strength",
         subsubtitle="Moderate boost to wisdom"
     )
@@ -321,7 +321,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Tide",
-        action=Tide(name, 100, 10, 10, 10, 10),
+        action=Tide(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to intelligence",
         subsubtitle="Moderate boost to strength"
     )
@@ -333,7 +333,7 @@ def class_selection_screen(screen, name, assets):
         bg_rgb=BLACK,
         text_rgb=WHITE,
         text="Wind",
-        action=Wind(name, 100, 10, 10, 10, 10),
+        action=Wind(name, 100, 10, 10, 10, 10, 10),
         subtitle="Large boost to dexterity",
         subsubtitle="Moderate boost to wisdom"
     )
