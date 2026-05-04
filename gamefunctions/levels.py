@@ -155,11 +155,8 @@ def play_level_3(screen, player, story):
         else: 
             lines.append("You fail to sneak past the monster and alert it to your presence. It roars and lunges.")
             story.make_choice("Failed to sneak past the monster in the hallway")
-    elif round == 4: 
-        lines = []
-        pass
     else:
-        lines = ["filler"]
+        lines = ["All is quiet in the hallway. All that is left are the flecks of memory of a battle."]
 
     row = [(SCREEN_WIDTH // 3 * (i + 1), button_y(lines)) for i in range(3)]
 
@@ -202,6 +199,16 @@ def play_level_3(screen, player, story):
         border_rgb=WHITE,
     )
 
+    next_lvl_btn = Button(
+        center_position=(SCREEN_WIDTH // 2, button_y(lines)),
+        font_size=20,
+        bg_rgb=BLACK,
+        text_rgb=WHITE,
+        text="Onwards",
+        action=GameState.LEVEL_4,
+        border_rgb=WHITE,
+    )
+
     buttons = RenderUpdates(return_btn, inventory_btn, continue_btn)
     if round == 2:
         buttons.remove(continue_btn)
@@ -210,8 +217,11 @@ def play_level_3(screen, player, story):
         buttons.add(attack_btn)
     if round == 3:
         buttons.remove(continue_btn)
-        buttons.remove(draw_btn)
-        buttons.remove(sneak_btn)
+        buttons.add(attack_btn)
+    if round >= 4:
+        buttons.remove(continue_btn)
+        buttons.add(next_lvl_btn) 
+
     
     while True:
         result = game_loop(screen, buttons, extra_draw_callback=lambda surface: draw_lines(surface, lines))
@@ -231,6 +241,10 @@ def play_level_3(screen, player, story):
         else:
             return GameState.TITLE
 
+def play_level_4(screen, player, story):
+    story.enter_scene("The Abandoned Library")
+    return_btn, inventory_btn = nav_buttons(screen, player)
+    round = story.roungs("The Abandoned Library")
 
 
 

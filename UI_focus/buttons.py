@@ -66,8 +66,9 @@ class GameState(Enum):
     NEWGAME = 1
     INVENTORY = 2
     PLAYING = 3
-    REPEAT = 4
-    LEVEL_2 = 5
-    LEVEL_3 = 6
-    FIGHT = 7
-    FIGHT_DONE = 8
+    FIGHT = 4
+    FIGHT_DONE = 5
+    REPEAT = 6
+    LEVEL_2 = 7
+    LEVEL_3 = 8
+    LEVEL_4 = 9

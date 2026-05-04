@@ -42,6 +42,12 @@ def main():
                 pass
             else:
                 game_state = result
+        if game_state == GameState.LEVEL_4:
+            result = play_level_4(screen, player, story)
+            if result == GameState.REPEAT:
+                pass
+            else: 
+                game_state = result
         if game_state == GameState.QUIT:
             pygame.quit()
             return
